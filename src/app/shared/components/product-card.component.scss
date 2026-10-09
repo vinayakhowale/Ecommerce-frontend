@@ -1,0 +1,123 @@
+.product-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ----------------------------------------------------------------- image */
+.frame {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;             /* portrait: product photography reads better tall */
+  background: var(--paper-deep);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity var(--dur-med) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+}
+.shot.alt { opacity: 0; }
+
+.frame-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--ink-faint);
+  background: var(--paper-deep);
+}
+
+.flag {
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--r-sm);
+  line-height: 1.3;
+}
+.flag-sale { background: var(--brass-wash); color: var(--brass); }
+
+/* ------------------------------------------------------------------ text */
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-top: 0.85rem;
+}
+.brand {
+  font-size: var(--t-xs);
+  color: var(--ink-faint);
+  font-weight: 600;
+}
+.name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  /* Two lines max, so cards in a row stay aligned regardless of title length. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.prices {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.25rem 0 0;
+}
+.price { font-size: 0.98rem; color: var(--ink); }
+.was {
+  font-size: var(--t-xs);
+  color: var(--ink-faint);
+  text-decoration: line-through;
+}
+
+/* --------------------------------------------------------------- actions */
+.actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+}
+.actions .btn { flex: 1; padding-inline: 0.5rem; }
+
+/* Pointer devices: keep the card quiet until the user shows intent. */
+@media (hover: hover) and (pointer: fine) {
+  .actions {
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  }
+  .product-card:hover .actions,
+  .product-card:focus-within .actions { opacity: 1; transform: none; }
+
+  .product-card:hover .shot { transform: scale(1.03); }
+  .product-card:hover .shot.alt { opacity: 1; }
+}
+
+/* Touch devices: no hover, so actions are always visible and full size. */
+@media (hover: none) {
+  .shot.alt { display: none; }
+}
+
+@media (max-width: 640px) {
+  .name { font-size: 0.95rem; }
+  .price { font-size: 0.9rem; }
+  .actions { flex-direction: column; }
+  .actions .btn { width: 100%; }
+}
