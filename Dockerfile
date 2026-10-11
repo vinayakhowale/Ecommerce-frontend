@@ -1,11 +1,11 @@
-FROM node:20-alpine AS build
-WORKDIR /app
-COPY package.json ./
-RUN npm install
-COPY . .
-RUN npm run build:prod
+FROM nginx:alpine
 
-FROM nginx:1.27-alpine
-COPY --from=build /app/dist/social-commerce-frontend/browser /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+# remove any old copy line like:
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY nginx/default.conf.template /etc/nginx/templates/default.conf.template
+
+# fallback values in case Railway doesn't set them
+ENV PORT=80
+
+COPY --from=build /app/dist/<your-app-name>/browser /usr/share/nginx/html
